@@ -1,4 +1,4 @@
-# ESP32 Security Core - BETA!!
+# ESP32 Security Core
 
 Offline-first ESP32-based alarm system with **Master (central unit)** and **Slave (zone expanders)** communicating via **ESP-NOW**.
 
@@ -175,6 +175,136 @@ These files are uploaded to SPIFFS:
 * `app.js` → WebSocket + commands
 
 You can fully customize the UI without touching firmware logic.
+
+---
+
+## 🔌 Wiring & Connections
+
+This section explains how to physically connect sensors and actuators to the ESP32 Master and Slave boards.
+
+---
+
+### 🧠 ESP32 MASTER – Wiring
+
+#### 1️⃣ Power Supply
+
+* **Recommended:** 5V regulated power supply (≥1A)
+* Connect:
+
+  * `5V` → ESP32 `5V` (or `VIN`)
+  * `GND` → ESP32 `GND`
+
+⚠️ For real installations, use a **backup battery or UPS module**.
+
+---
+
+#### 2️⃣ Siren / Relay Output
+
+The Master drives the siren through a **relay module** (recommended).
+
+```cpp
+#define SIREN_PIN 26
+```
+
+**Connections:**
+
+| ESP32   | Relay Module |
+| ------- | ------------ |
+| GPIO 26 | IN           |
+| GND     | GND          |
+| 5V      | VCC          |
+
+**Relay Contacts:**
+
+* `COM` → Siren power
+* `NO` → Siren positive input
+
+> Use an external power supply for high-power sirens.
+
+---
+
+#### 3️⃣ Status LED (Optional)
+
+```text
+ESP32 GPIO → 330Ω resistor → LED → GND
+```
+
+Useful for ARM / ALARM indication.
+
+---
+
+### 📡 ESP32 SLAVE – Wiring
+
+Each Slave handles **one zone**.
+
+---
+
+#### 1️⃣ Power Supply
+
+* Same as Master
+* 5V or USB power
+
+---
+
+#### 2️⃣ Door / Window Magnetic Contact (NC – Recommended)
+
+```cpp
+#define ZONE_PIN 14
+```
+
+**Connections:**
+
+```text
+ZONE_PIN (GPIO14) ──────┐
+                         ├── Magnetic Contact (NC)
+GND ────────────────────┘
+```
+
+* Uses `INPUT_PULLUP`
+* Circuit closed = NORMAL
+* Circuit open = ALARM
+
+---
+
+#### 3️⃣ PIR Motion Sensor
+
+**Typical PIR pins:** `VCC`, `OUT`, `GND`
+
+```text
+PIR VCC → 5V
+PIR GND → GND
+PIR OUT → GPIO14
+```
+
+> Ensure PIR output is **3.3V compatible**.
+
+---
+
+#### 4️⃣ Tamper Switch (Optional)
+
+Tamper can be wired **in series** with the NC contact.
+
+```text
+GPIO ──[Tamper NC]──[Contact NC]── GND
+```
+
+Any opening triggers the zone.
+
+---
+
+### 🔌 Cable Recommendations
+
+* Twisted pair for long runs
+* Shielded cable for PIR
+* Max ESP-NOW distance: ~20–30m indoor
+
+---
+
+### ⚠️ Electrical Safety Notes
+
+* Do **NOT** connect mains voltage directly to ESP32
+* Always use relays or optocouplers
+* Common GND required between sensors and ESP32
 
 ---
 
