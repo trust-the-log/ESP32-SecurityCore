@@ -342,7 +342,7 @@ Any opening triggers the zone.
 
 ## 📜 License
 
-MIT – use, modify, learn, improve.
+Licensed under the Apache License, Version 2.0.
 
 ---
 
