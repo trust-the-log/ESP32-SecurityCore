@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ESP32 Alarm</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>ESP32 SECURITY CORE</h2>
+
+<div id="state">---</div>
+<div id="entry"></div>
+
+<input id="pin" type="password" placeholder="PIN">
+<br><br>
+<button onclick="arm()">ARM</button>
+<button onclick="disarm()">DISARM</button>
+
+<h3>Zones</h3>
+<div id="zones"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
